@@ -45,7 +45,7 @@ int main(){
   {
    for(int j=0; j<Nk; j++){
 
-      step(u1,u0,dt,dx,D,N);
+      step(u1,u0,dt,dx,D,N);  //HIER IST DIE STEPFUNKTION
 
       h = u0;
       u0 = u1;
@@ -77,6 +77,20 @@ void step(double* const f1, double* const f0,
   for(int i=0;i<N;i++) u[i] = - D*dt/(dx*dx);
   for(int i=0;i<N;i++) l[i] = - D*dt/(dx*dx);
 
+  for(int i=1; i<N; i++){
+   
+    d[i] -= l[i]*u[i-1]/d[i-1]; 
+    f0[i] -= l[i]*f0[i-1]/d[i-1];
+    
+  }
+  
+  f1[N-1] = f0[N-1]/d[N-1];
+  
+  for(int i=N-1; i>0; i--){
+   
+    f1[i-1] = (f0[i-1]-u[i-1]*f1[i])/d[i-1];
+    
+  }
 
   delete[] d;
   delete[] u;
